@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Everdaylio — whatever you want is here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8EC;
+    --paper:#FFFDF9;
+    --ink:#1C2541;
+    --ink-soft:#4A5170;
+    --marigold:#F5A623;
+    --marigold-dark:#D6890A;
+    --teal:#147D75;
+    --teal-dark:#0E5F59;
+    --brick:#E1523D;
+    --line: rgba(28,37,65,0.12);
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(28,37,65,0.12);
+    --container: 1240px;
+    --pad: clamp(18px, 4.5vw, 60px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-l: env(safe-area-inset-left, 0px);
+    --safe-r: env(safe-area-inset-right, 0px);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    width:100%;
+    min-width:280px;
+  }
+  img{max-width:100%;display:block;}
+  button{font-family:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+  a{color:inherit; -webkit-tap-highlight-color:transparent;}
+  button, a, input{ touch-action:manipulation; }
+
+  /* Neutralize hover-only motion on touchscreens so taps don't get "stuck" hover states */
+  @media (hover:none){
+    .product-card:hover{ transform:none; box-shadow:var(--shadow); }
+    .product-card:hover .product-media img{ transform:none; }
+    .shop-now:hover{ transform:none; }
+    .cart-fab:hover, .whatsapp-fab:hover{ transform:none; }
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    color:var(--teal-dark);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:18px;height:2px;background:var(--marigold-dark);display:inline-block;
+  }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    background:rgba(255,248,236,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding-top:var(--safe-t);
+  }
+  .topbar-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px var(--pad);
+    padding-left:calc(var(--pad) + var(--safe-l));
+    padding-right:calc(var(--pad) + var(--safe-r));
+    max-width:var(--container);
+    margin:0 auto;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-weight:800;
+    font-size:1.25rem;
+    letter-spacing:-0.01em;
+  }
+  .brand span{color:var(--brick);}
+  .topbar-cart{
+    position:relative;
+    background:var(--ink);
+    color:var(--cream);
+    border:none;
+    width:42px;height:42px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .topbar-cart svg{width:19px;height:19px;}
+  .badge{
+    position:absolute; top:-4px; right:-4px;
+    background:var(--brick);
+    color:#fff;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.64rem; font-weight:700;
+    min-width:18px; height:18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 3px;
+    border:2px solid var(--cream);
+    transition:transform .25s ease;
+  }
+  .badge.pulse{ animation:pulse .4s ease; }
+  @keyframes pulse{ 0%{transform:scale(1)} 40%{transform:scale(1.45)} 100%{transform:scale(1)} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:80vh;
+    min-height:80svh;
+    max-height:900px;
+    display:flex;
+    align-items:flex-end;
+    overflow:hidden;
+  }
+  .hero-img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    transform:scale(1.04);
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(28,37,65,0.15) 0%, rgba(28,37,65,0.35) 55%, rgba(28,37,65,0.88) 100%);
+  }
+  .hero-content{
+    position:relative; z-index:2;
+    padding:40px var(--pad) 46px;
+    padding-left:calc(var(--pad) + var(--safe-l));
+    padding-right:calc(var(--pad) + var(--safe-r));
+    padding-bottom:calc(46px + var(--safe-b) * 0.2);
+    color:var(--cream);
+    max-width:680px;
+    opacity:0;
+    animation:riseIn .9s cubic-bezier(.22,.9,.3,1) .15s forwards;
+  }
+  @media (min-width:1400px){
+    .hero-content{ padding-left:calc((100vw - var(--container)) / 2 + var(--pad)); }
+  }
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(26px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .hero-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--marigold);
+    font-weight:700;
+    margin-bottom:14px;
+    display:block;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:900;
+    font-size:clamp(2.6rem, 10vw, 5rem);
+    line-height:0.98;
+    margin:0 0 14px;
+    letter-spacing:-0.02em;
+  }
+  .hero p.tag{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(1.05rem, 3.6vw, 1.4rem);
+    color:#F3EADA;
+    margin:0 0 28px;
+  }
+  .shop-now{
+    background:var(--marigold);
+    color:var(--ink);
+    border:none;
+    font-weight:800;
+    font-size:0.98rem;
+    padding:16px 30px;
+    border-radius:100px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    box-shadow:0 10px 24px rgba(245,166,35,0.35);
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .shop-now:hover{ transform:translateY(-2px); background:var(--marigold-dark); box-shadow:0 14px 28px rgba(245,166,35,0.4);}
+  .shop-now svg{width:16px;height:16px; transition:transform .2s ease;}
+  .shop-now:hover svg{ transform:translateY(3px); }
+
+  /* ---------- PRODUCTS ---------- */
+  .products-section{
+    padding:clamp(44px, 8vw, 80px) 0 40px;
+    max-width:var(--container);
+    margin:0 auto;
+  }
+  .products-head{
+    padding:0 var(--pad);
+    padding-left:calc(var(--pad) + var(--safe-l));
+    padding-right:calc(var(--pad) + var(--safe-r));
+    margin-bottom:28px;
+  }
+  .products-head h2{
+    font-family:'Fraunces', serif;
+    font-weight:800;
+    font-size:clamp(1.7rem, 6vw, 2.4rem);
+    margin:10px 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .products-head p{
+    color:var(--ink-soft);
+    max-width:460px;
+    margin:0;
+    font-size:0.98rem;
+  }
+
+  .carousel-wrap{ position:relative; }
+  .carousel{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    padding:6px var(--pad) 20px;
+    padding-left:calc(var(--pad) + var(--safe-l));
+    padding-right:calc(var(--pad) + var(--safe-r));
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .carousel::-webkit-scrollbar{ display:none; }
+
+  .product-card{
+    scroll-snap-align:start;
+    flex:0 0 82%;
+    max-width:320px;
+    background:var(--paper);
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .product-card:hover{ transform:translateY(-4px); box-shadow:0 16px 34px rgba(28,37,65,0.16); }
+  }
+
+  /* Small phones: let one card fill almost the full width for readability */
+  @media (max-width:380px){
+    .product-card{ flex-basis:88%; }
+  }
+
+  /* Tablets: two-ish cards visible per view */
+  @media (min-width:600px) and (max-width:899px){
+    .product-card{ flex-basis:46%; max-width:340px; }
+  }
+
+  /* Desktop and up: drop the horizontal scroll for a calm, evenly-spaced grid */
+  @media (min-width:900px){
+    .carousel{
+      overflow-x:visible;
+      flex-wrap:wrap;
+      scroll-snap-type:none;
+      padding-bottom:6px;
+    }
+    .product-card{ flex:1 1 280px; max-width:none; scroll-snap-align:none; }
+    .carousel-hint{ display:none; }
+  }
+  .product-media{
+    position:relative;
+    aspect-ratio:1/1;
+    background:#EFE7D6;
+    overflow:hidden;
+  }
+  .product-media img{
+    width:100%; height:100%; object-fit:cover;
+    transition:transform .5s ease;
+  }
+  .product-card:hover .product-media img{ transform:scale(1.06); }
+
+  .price-tag{
+    position:absolute;
+    top:12px; right:-6px;
+    background:var(--teal);
+    color:#fff;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:0.82rem;
+    padding:7px 14px 7px 12px;
+    border-radius:6px 3px 3px 6px;
+    box-shadow:0 6px 14px rgba(20,125,117,0.4);
+    transform:rotate(3deg);
+  }
+  .price-tag::before{
+    content:"";
+    position:absolute;
+    left:5px; top:50%; transform:translateY(-50%);
+    width:5px;height:5px;border-radius:50%;
+    background:var(--paper);
+  }
+
+  .product-info{
+    padding:16px 16px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    flex:1;
+  }
+  .product-info h3{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:1.12rem;
+    margin:0;
+    line-height:1.2;
+  }
+  .product-info .desc{
+    color:var(--ink-soft);
+    font-size:0.86rem;
+    margin:0;
+    line-height:1.4;
+  }
+  .add-cart-btn{
+    margin-top:auto;
+    background:var(--ink);
+    color:var(--cream);
+    border:none;
+    padding:12px 16px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:0.9rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:background .2s ease, transform .15s ease;
+  }
+  .add-cart-btn:active{ transform:scale(0.97); }
+  .add-cart-btn:hover{ background:var(--brick); }
+  .add-cart-btn svg{width:15px;height:15px;}
+
+  .carousel-hint{
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    letter-spacing:0.05em;
+    padding:0 var(--pad);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ink);
+    color:var(--cream);
+    padding:46px var(--pad) calc(130px + var(--safe-b));
+    margin-top:20px;
+  }
+  footer .footer-inner{
+    max-width:var(--container);
+    margin:0 auto;
+  }
+  footer .brand{ color:var(--cream); font-size:1.4rem; margin-bottom:6px;}
+  footer .brand span{ color:var(--marigold); }
+  footer p.f-tag{
+    font-family:'Fraunces', serif; font-style:italic; color:#B9BFD6;
+    margin:0 0 24px; font-size:1rem;
+  }
+  footer .f-row{
+    display:flex; flex-wrap:wrap; gap:10px 24px;
+    font-size:0.86rem; color:#C9CEE0;
+    border-top:1px solid rgba(255,255,255,0.12);
+    padding-top:20px;
+  }
+  footer a.f-email{ color:var(--marigold); font-weight:600; text-decoration:none; }
+
+  /* ---------- FLOATING BUTTONS ---------- */
+  .fab-stack{
+    position:fixed;
+    bottom:calc(22px + var(--safe-b));
+    right:calc(20px + var(--safe-r));
+    z-index:60;
+    display:flex; flex-direction:column; gap:14px; align-items:flex-end;
+  }
+  .cart-fab{
+    position:relative;
+    background:var(--brick);
+    color:#fff;
+    border:none;
+    width:58px; height:58px;
+    min-width:44px; min-height:44px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 26px rgba(225,82,61,0.45);
+    transition:transform .2s ease;
+    flex-shrink:0;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .cart-fab:hover{ transform:translateY(-3px) scale(1.03); }
+  }
+  .cart-fab svg{ width:23px;height:23px; }
+  .cart-fab .badge{
+    top:-4px; right:-4px; border-color:var(--cream);
+  }
+
+  .whatsapp-fab{
+    position:fixed;
+    bottom:calc(22px + var(--safe-b));
+    left:calc(20px + var(--safe-l));
+    z-index:60;
+    background:#25D366;
+    width:54px; height:54px;
+    min-width:44px; min-height:44px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 26px rgba(37,211,102,0.45);
+    text-decoration:none;
+    transition:transform .2s ease;
+    flex-shrink:0;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .whatsapp-fab:hover{ transform:translateY(-3px) scale(1.03); }
+  }
+  .whatsapp-fab svg{ width:27px; height:27px; }
+
+  /* Keep both floating buttons comfortably sized on very small phones */
+  @media (max-width:340px){
+    .cart-fab{ width:52px; height:52px; }
+    .whatsapp-fab{ width:48px; height:48px; }
+  }
+
+  /* ---------- CART DRAWER ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(28,37,65,0.5);
+    backdrop-filter:blur(2px);
+    z-index:80;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .overlay.show{ opacity:1; pointer-events:auto; }
+
+  .drawer{
+    position:fixed;
+    top:0; right:0; bottom:0;
+    width:100%; max-width:440px;
+    background:var(--paper);
+    z-index:90;
+    transform:translateX(105%);
+    transition:transform .35s cubic-bezier(.25,.9,.3,1);
+    display:flex; flex-direction:column;
+    box-shadow:-16px 0 40px rgba(0,0,0,0.2);
+    padding-right:var(--safe-r);
+  }
+  .drawer.show{ transform:translateX(0); }
+
+  .drawer-head{
+    padding:calc(20px + var(--safe-t)) 20px 16px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    flex-shrink:0;
+  }
+  .drawer-head h3{
+    font-family:'Fraunces', serif; font-weight:800; font-size:1.3rem; margin:0;
+  }
+  .drawer-close{
+    background:var(--cream); border:none; width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .drawer-close svg{ width:15px; height:15px; }
+
+  .drawer-body{
+    flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 20px;
+    min-height:0;
+  }
+  .empty-cart{
+    text-align:center; color:var(--ink-soft); padding:60px 10px; font-size:0.92rem;
+  }
+  .empty-cart svg{ width:44px; height:44px; margin-bottom:14px; opacity:0.5; }
+
+  .cart-item{
+    display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line);
+  }
+  .cart-item img{ width:64px; height:64px; border-radius:10px; object-fit:cover; flex-shrink:0; }
+  .cart-item-info{ flex:1; display:flex; flex-direction:column; gap:6px; }
+  .cart-item-info .ci-name{ font-weight:700; font-size:0.92rem; }
+  .cart-item-info .ci-price{ font-family:'JetBrains Mono', monospace; font-size:0.82rem; color:var(--teal-dark); font-weight:700; }
+  .qty-row{ display:flex; align-items:center; gap:10px; margin-top:2px; }
+  .qty-btn{
+    width:26px; height:26px; border-radius:50%; border:1px solid var(--line); background:var(--cream);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.9rem; color:var(--ink);
+  }
+  .qty-val{ font-family:'JetBrains Mono', monospace; font-weight:700; font-size:0.88rem; min-width:16px; text-align:center; }
+  .remove-btn{
+    margin-left:auto; background:none; border:none; color:var(--brick); font-size:0.78rem; font-weight:700;
+    text-decoration:underline;
+  }
+
+  .drawer-foot{
+    border-top:1px solid var(--line);
+    padding:16px 20px calc(20px + var(--safe-b));
+    background:var(--paper);
+    flex-shrink:0;
+  }
+  .total-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:14px;
+  }
+  .total-row .label{ font-size:0.9rem; color:var(--ink-soft); font-weight:600; }
+  .total-row .amount{ font-family:'JetBrains Mono', monospace; font-weight:800; font-size:1.3rem; color:var(--ink); }
+
+  .checkout-btn{
+    width:100%;
+    background:var(--marigold);
+    color:var(--ink);
+    border:none;
+    padding:15px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:0.98rem;
+    transition:background .2s ease;
+  }
+  .checkout-btn:hover{ background:var(--marigold-dark); }
+  .checkout-btn:disabled{ background:#E4DCC8; color:#9a9481; cursor:not-allowed; }
+
+  /* ---------- CHECKOUT FORM ---------- */
+  .checkout-form{
+    display:none;
+    flex-direction:column;
+    gap:14px;
+  }
+  .checkout-form.show{ display:flex; }
+  .checkout-form label{
+    font-size:0.8rem; font-weight:700; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:0.04em;
+    margin-bottom:6px; display:block;
+  }
+  .checkout-form input{
+    width:100%;
+    border:1px solid var(--line);
+    background:var(--cream);
+    padding:13px 14px;
+    border-radius:10px;
+    font-family:'Inter', sans-serif;
+    font-size:16px; /* keeps iOS Safari from auto-zooming on focus */
+    color:var(--ink);
+    min-height:46px;
+  }
+  .checkout-form input:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+  .back-to-cart{
+    background:none; border:none; color:var(--ink-soft); font-size:0.82rem; font-weight:600;
+    text-decoration:underline; align-self:flex-start; margin-top:-6px;
+  }
+  .form-error{
+    color:var(--brick); font-size:0.78rem; font-weight:600; display:none;
+  }
+  .form-error.show{ display:block; }
+
+  /* ================= RESPONSIVE LAYER ================= */
+
+  /* Extra-small phones (older iPhones, small Androids) */
+  @media (max-width:359px){
+    .hero h1{ font-size:2.3rem; }
+    .shop-now{ padding:14px 22px; font-size:0.9rem; width:100%; justify-content:center; }
+    .drawer-head h3{ font-size:1.15rem; }
+  }
+
+  /* Tablets, portrait (iPad mini/Air and similar) */
+  @media (min-width:600px){
+    .hero-content{ padding-top:60px; }
+    .products-head p{ max-width:520px; }
+    .drawer{ max-width:400px; }
+  }
+
+  /* Tablets landscape / small laptops */
+  @media (min-width:900px){
+    .hero-content{ padding-top:0; max-width:620px; }
+    .topbar-cart{ width:46px; height:46px; }
+    .fab-stack{ bottom:calc(28px + var(--safe-b)); right:calc(28px + var(--safe-r)); }
+    .whatsapp-fab{ bottom:calc(28px + var(--safe-b)); left:calc(28px + var(--safe-r)); }
+  }
+
+  /* Laptops / desktops */
+  @media (min-width:1100px){
+    .hero h1{ font-size:clamp(3.4rem, 5.6vw, 5.6rem); }
+    .products-head p{ max-width:560px; font-size:1.05rem; }
+    .drawer{ max-width:440px; }
+  }
+
+  /* Large / ultra-wide desktop monitors */
+  @media (min-width:1600px){
+    :root{ --container:1360px; }
+    .hero{ max-height:820px; }
+  }
+
+  /* Short viewports (landscape phones, small laptops with browser chrome) */
+  @media (max-height:480px) and (orientation:landscape){
+    .hero{ min-height:auto; height:100vh; height:100dvh; padding-top:60px; }
+    .hero-content{ padding-top:12px; padding-bottom:24px; }
+    .hero h1{ font-size:clamp(1.8rem, 6vw, 2.6rem); }
+    .hero p.tag{ margin-bottom:16px; }
+    .drawer-head{ padding-top:14px; }
+    .fab-stack, .whatsapp-fab{ transform:scale(0.85); }
+  }
+
+  /* Foldables / very narrow widths as a safety net */
+  @media (max-width:280px){
+    .fab-stack{ right:10px; }
+    .whatsapp-fab{ left:10px; }
+  }
+
+  /* Fine-pointer devices only: restore intentional hover lifts removed for touch */
+  @media (hover:hover) and (pointer:fine){
+    .add-cart-btn:hover{ background:var(--brick); }
+    .checkout-btn:hover{ background:var(--marigold-dark); }
+  }
+
+  /* High-DPI screens: crisper hairlines */
+  @media (-webkit-min-device-pixel-ratio:2), (min-resolution:192dpi){
+    .topbar, .drawer, .product-card{ border-width:0.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  @media print{
+    .fab-stack, .whatsapp-fab, .overlay, .drawer, .topbar{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Everday<span>lio</span></div>
+    <button class="topbar-cart" id="topCartBtn" aria-label="Open cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+      <span class="badge" id="topBadge" style="display:none;">0</span>
+    </button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <img class="hero-img" src="https://i.ibb.co/j9P9bFQ3/banner-img.jpg" alt="Everdaylio shop banner">
+  <div class="hero-content">
+    <span class="hero-eyebrow">Your everyday corner store</span>
+    <h1>Whatever you<br>want is here.</h1>
+    <p class="tag">From the small stuff to the stuff you didn't know you needed — Everdaylio has it.</p>
+    <button class="shop-now" id="shopNowBtn">
+      Shop Now
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"></path></svg>
+    </button>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="products-head">
+    <span class="eyebrow">Fresh on the shelf</span>
+    <h2>Pick what you're missing today</h2>
+    <p>Hand-picked essentials, restocked often. Swipe through and add whatever catches your eye.</p>
+  </div>
+
+  <div class="carousel-wrap">
+    <div class="carousel" id="carousel">
+      <!-- product cards injected by JS -->
+    </div>
+  </div>
+  <p class="carousel-hint">← swipe to see more →</p>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="brand">Everday<span>lio</span></div>
+    <p class="f-tag">"whatever you want is here"</p>
+    <div class="f-row">
+      <span>Questions about an order? <a class="f-email" href="mailto:everlio332@gmail.com">everlio332@gmail.com</a></span>
+      <span>© <span id="year"></span> Everdaylio. Made with care for your everyday.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING BUTTONS -->
+<div class="fab-stack">
+  <button class="cart-fab" id="fabCartBtn" aria-label="Open cart">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+    <span class="badge" id="fabBadge" style="display:none;">0</span>
+  </button>
+</div>
+
+<a class="whatsapp-fab" href="https://wa.me/923324800680" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.004 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.6 4.38 1.64 6.22L3.2 28.8l6.77-1.6a12.73 12.73 0 0 0 6.03 1.53h.005c7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.63-3.75-9.05a12.73 12.73 0 0 0-9.05-3.75zm0 23.36h-.004a10.5 10.5 0 0 1-5.35-1.47l-.384-.228-3.98.94.95-3.88-.25-.4a10.52 10.52 0 0 1-1.62-5.6c0-5.83 4.75-10.58 10.6-10.58 2.83 0 5.49 1.1 7.49 3.1a10.52 10.52 0 0 1 3.1 7.49c-.005 5.83-4.76 10.58-10.57 10.58zm5.8-7.92c-.32-.16-1.88-.93-2.17-1.03-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.54-.71-.55h-.6c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.8.66.76.24 1.44.21 1.99.13.61-.09 1.88-.77 2.14-1.51.27-.74.27-1.38.19-1.51-.08-.14-.29-.21-.61-.37z"/></svg>
+</a>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Your cart</h3>
+    <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <div class="drawer-body" id="cartBody">
+    <!-- cart contents injected by JS -->
+  </div>
+
+  <div class="drawer-foot" id="drawerFoot" style="display:none;">
+    <div class="total-row">
+      <span class="label">Total</span>
+      <span class="amount" id="totalAmount">Rs. 0</span>
+    </div>
+
+    <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+
+    <form class="checkout-form" id="checkoutForm">
+      <button type="button" class="back-to-cart" id="backToCart">← back to cart</button>
+      <div>
+        <label for="custName">Your name</label>
+        <input type="text" id="custName" name="custName" placeholder="e.g. Ayesha Khan" required>
+      </div>
+      <div>
+        <label for="custPhone">Phone number</label>
+        <input type="tel" id="custPhone" name="custPhone" placeholder="e.g. 0332 4800 680" required>
+      </div>
+      <span class="form-error" id="formError">Please fill in your name and phone number.</span>
+      <button type="submit" class="checkout-btn">Place Order via Email</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---------- PRODUCT DATA ----------
+  const PRODUCTS = [
+    {
+      id: 'p1',
+      name: 'Everyday Carry Pouch',
+      price: 1450,
+      desc: 'Compact zip pouch for the odds and ends you always reach for.',
+      img: 'https://i.ibb.co/cKGVbpPR/2026-06-13-3bb5283b6d3f188cac070335c5b9871b.jpg'
+    },
+    {
+      id: 'p2',
+      name: 'Home Comfort Essentials Set',
+      price: 2290,
+      desc: 'A little bundle of everyday must-haves for around the house.',
+      img: 'https://i.ibb.co/99D03yMp/2026-06-13-acd7f22a0b50cc29e6597300be60aa36.png'
+    },
+    {
+      id: 'p3',
+      name: 'Daily Grab-and-Go Kit',
+      price: 1890,
+      desc: 'Whatever the day throws at you, this kit has you covered.',
+      img: 'https://i.ibb.co/V8b4jVG/2026-06-13-7cd9ae377b86787235093ae4914f4d19.png'
+    }
+  ];
+
+  const SHOP_EMAIL = 'everlio332@gmail.com';
+
+  // ---------- STATE ----------
+  let cart = {}; // id -> qty
+
+  // ---------- RENDER PRODUCTS ----------
+  const carousel = document.getElementById('carousel');
+  carousel.innerHTML = PRODUCTS.map(p => `
+    <div class="product-card">
+      <div class="product-media">
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+        <span class="price-tag">Rs. ${p.price.toLocaleString()}</span>
+      </div>
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <p class="desc">${p.desc}</p>
+        <button class="add-cart-btn" data-id="${p.id}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.add-cart-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      cart[id] = (cart[id] || 0) + 1;
+      updateBadges(true);
+      renderCart();
+      btn.textContent = '';
+      btn.innerHTML = '✓ Added';
+      setTimeout(() => {
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg> Add to Cart`;
+      }, 900);
+    });
+  });
+
+  // ---------- SHOP NOW SCROLL ----------
+  document.getElementById('shopNowBtn').addEventListener('click', () => {
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ---------- BADGES ----------
+  function cartCount(){
+    return Object.values(cart).reduce((a,b) => a+b, 0);
+  }
+  function updateBadges(pulse){
+    const count = cartCount();
+    [document.getElementById('topBadge'), document.getElementById('fabBadge')].forEach(b => {
+      b.textContent = count;
+      b.style.display = count > 0 ? 'flex' : 'none';
+      if(pulse){
+        b.classList.remove('pulse');
+        void b.offsetWidth;
+        b.classList.add('pulse');
+      }
+    });
+  }
+
+  // ---------- CART DRAWER ----------
+  const overlay = document.getElementById('overlay');
+  const drawer = document.getElementById('drawer');
+  const cartBody = document.getElementById('cartBody');
+  const drawerFoot = document.getElementById('drawerFoot');
+  const checkoutForm = document.getElementById('checkoutForm');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  function openDrawer(){
+    overlay.classList.add('show');
+    drawer.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    overlay.classList.remove('show');
+    drawer.classList.remove('show');
+    document.body.style.overflow = '';
+    checkoutForm.classList.remove('show');
+    checkoutBtn.style.display = 'block';
+  }
+
+  ['topCartBtn','fabCartBtn'].forEach(id => {
+    document.getElementById(id).addEventListener('click', () => { renderCart(); openDrawer(); });
+  });
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+
+  function productById(id){ return PRODUCTS.find(p => p.id === id); }
+
+  function renderCart(){
+    const ids = Object.keys(cart).filter(id => cart[id] > 0);
+
+    if(ids.length === 0){
+      cartBody.innerHTML = `
+        <div class="empty-cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <div>Your cart is empty.<br>Go find something you like.</div>
+        </div>`;
+      drawerFoot.style.display = 'none';
+      updateBadges(false);
+      return;
+    }
+
+    drawerFoot.style.display = 'block';
+
+    cartBody.innerHTML = ids.map(id => {
+      const p = productById(id);
+      const qty = cart[id];
+      return `
+        <div class="cart-item">
+          <img src="${p.img}" alt="${p.name}">
+          <div class="cart-item-info">
+            <span class="ci-name">${p.name}</span>
+            <span class="ci-price">Rs. ${(p.price * qty).toLocaleString()}</span>
+            <div class="qty-row">
+              <button class="qty-btn" data-action="dec" data-id="${id}">−</button>
+              <span class="qty-val">${qty}</span>
+              <button class="qty-btn" data-action="inc" data-id="${id}">+</button>
+              <button class="remove-btn" data-action="remove" data-id="${id}">remove</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const total = ids.reduce((sum,id) => sum + productById(id).price * cart[id], 0);
+    document.getElementById('totalAmount').textContent = `Rs. ${total.toLocaleString()}`;
+
+    cartBody.querySelectorAll('[data-action]').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.id;
+        const action = el.dataset.action;
+        if(action === 'inc') cart[id]++;
+        if(action === 'dec'){ cart[id]--; if(cart[id] <= 0) delete cart[id]; }
+        if(action === 'remove') delete cart[id];
+        updateBadges(false);
+        renderCart();
+      });
+    });
+
+    updateBadges(false);
+  }
+
+  // ---------- CHECKOUT FORM ----------
+  checkoutBtn.addEventListener('click', () => {
+    checkoutForm.classList.add('show');
+    checkoutBtn.style.display = 'none';
+  });
+  document.getElementById('backToCart').addEventListener('click', () => {
+    checkoutForm.classList.remove('show');
+    checkoutBtn.style.display = 'block';
+  });
+
+  checkoutForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const errorEl = document.getElementById('formError');
+
+    const ids = Object.keys(cart).filter(id => cart[id] > 0);
+    if(!name || !phone || ids.length === 0){
+      errorEl.classList.add('show');
+      return;
+    }
+    errorEl.classList.remove('show');
+
+    const lines = ids.map(id => {
+      const p = productById(id);
+      const qty = cart[id];
+      return `- ${p.name} x${qty} — Rs. ${(p.price*qty).toLocaleString()}`;
+    });
+    const total = ids.reduce((sum,id) => sum + productById(id).price * cart[id], 0);
+
+    const subject = `New Order from ${name} — Everdaylio`;
+    const body =
+`New order from Everdaylio website
+
+Customer name: ${name}
+Phone number: ${phone}
+
+Items:
+${lines.join('\n')}
+
+Total: Rs. ${total.toLocaleString()}
+`;
+
+    const mailto = `mailto:${SHOP_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  });
+
+  updateBadges(false);
+</script>
+
+</body>
+</html>
