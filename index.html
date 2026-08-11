@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   :root{
     --cream:#FFF8EC;
@@ -28,7 +29,7 @@
     --safe-l: env(safe-area-inset-left, 0px);
     --safe-r: env(safe-area-inset-right, 0px);
   }
-
+ 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
   body{
@@ -45,7 +46,7 @@
   button{font-family:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent;}
   a{color:inherit; -webkit-tap-highlight-color:transparent;}
   button, a, input{ touch-action:manipulation; }
-
+ 
   /* Neutralize hover-only motion on touchscreens so taps don't get "stuck" hover states */
   @media (hover:none){
     .product-card:hover{ transform:none; box-shadow:var(--shadow); }
@@ -53,7 +54,7 @@
     .shop-now:hover{ transform:none; }
     .cart-fab:hover, .whatsapp-fab:hover{ transform:none; }
   }
-
+ 
   .eyebrow{
     font-family:'JetBrains Mono', monospace;
     font-weight:700;
@@ -69,7 +70,7 @@
     content:"";
     width:18px;height:2px;background:var(--marigold-dark);display:inline-block;
   }
-
+ 
   /* ---------- TOP BAR ---------- */
   .topbar{
     position:sticky; top:0; z-index:40;
@@ -117,7 +118,7 @@
   }
   .badge.pulse{ animation:pulse .4s ease; }
   @keyframes pulse{ 0%{transform:scale(1)} 40%{transform:scale(1.45)} 100%{transform:scale(1)} }
-
+ 
   /* ---------- HERO ---------- */
   .hero{
     position:relative;
@@ -198,7 +199,7 @@
   .shop-now:hover{ transform:translateY(-2px); background:var(--marigold-dark); box-shadow:0 14px 28px rgba(245,166,35,0.4);}
   .shop-now svg{width:16px;height:16px; transition:transform .2s ease;}
   .shop-now:hover svg{ transform:translateY(3px); }
-
+ 
   /* ---------- PRODUCTS ---------- */
   .products-section{
     padding:clamp(44px, 8vw, 80px) 0 40px;
@@ -224,7 +225,7 @@
     margin:0;
     font-size:0.98rem;
   }
-
+ 
   .carousel-wrap{ position:relative; }
   .carousel{
     display:flex;
@@ -238,7 +239,7 @@
     -webkit-overflow-scrolling:touch;
   }
   .carousel::-webkit-scrollbar{ display:none; }
-
+ 
   .product-card{
     scroll-snap-align:start;
     flex:0 0 82%;
@@ -255,17 +256,17 @@
   @media (hover:hover) and (pointer:fine){
     .product-card:hover{ transform:translateY(-4px); box-shadow:0 16px 34px rgba(28,37,65,0.16); }
   }
-
+ 
   /* Small phones: let one card fill almost the full width for readability */
   @media (max-width:380px){
     .product-card{ flex-basis:88%; }
   }
-
+ 
   /* Tablets: two-ish cards visible per view */
   @media (min-width:600px) and (max-width:899px){
     .product-card{ flex-basis:46%; max-width:340px; }
   }
-
+ 
   /* Desktop and up: drop the horizontal scroll for a calm, evenly-spaced grid */
   @media (min-width:900px){
     .carousel{
@@ -288,7 +289,7 @@
     transition:transform .5s ease;
   }
   .product-card:hover .product-media img{ transform:scale(1.06); }
-
+ 
   .price-tag{
     position:absolute;
     top:12px; right:-6px;
@@ -309,7 +310,7 @@
     width:5px;height:5px;border-radius:50%;
     background:var(--paper);
   }
-
+ 
   .product-info{
     padding:16px 16px 18px;
     display:flex;
@@ -348,7 +349,7 @@
   .add-cart-btn:active{ transform:scale(0.97); }
   .add-cart-btn:hover{ background:var(--brick); }
   .add-cart-btn svg{width:15px;height:15px;}
-
+ 
   .carousel-hint{
     text-align:center;
     font-family:'JetBrains Mono', monospace;
@@ -357,7 +358,7 @@
     letter-spacing:0.05em;
     padding:0 var(--pad);
   }
-
+ 
   /* ---------- FOOTER ---------- */
   footer{
     background:var(--ink);
@@ -382,7 +383,7 @@
     padding-top:20px;
   }
   footer a.f-email{ color:var(--marigold); font-weight:600; text-decoration:none; }
-
+ 
   /* ---------- FLOATING BUTTONS ---------- */
   .fab-stack{
     position:fixed;
@@ -411,7 +412,7 @@
   .cart-fab .badge{
     top:-4px; right:-4px; border-color:var(--cream);
   }
-
+ 
   .whatsapp-fab{
     position:fixed;
     bottom:calc(22px + var(--safe-b));
@@ -431,13 +432,13 @@
     .whatsapp-fab:hover{ transform:translateY(-3px) scale(1.03); }
   }
   .whatsapp-fab svg{ width:27px; height:27px; }
-
+ 
   /* Keep both floating buttons comfortably sized on very small phones */
   @media (max-width:340px){
     .cart-fab{ width:52px; height:52px; }
     .whatsapp-fab{ width:48px; height:48px; }
   }
-
+ 
   /* ---------- CART DRAWER ---------- */
   .overlay{
     position:fixed; inset:0;
@@ -448,7 +449,7 @@
     transition:opacity .3s ease;
   }
   .overlay.show{ opacity:1; pointer-events:auto; }
-
+ 
   .drawer{
     position:fixed;
     top:0; right:0; bottom:0;
@@ -462,7 +463,7 @@
     padding-right:var(--safe-r);
   }
   .drawer.show{ transform:translateX(0); }
-
+ 
   .drawer-head{
     padding:calc(20px + var(--safe-t)) 20px 16px;
     display:flex; align-items:center; justify-content:space-between;
@@ -477,7 +478,7 @@
     display:flex; align-items:center; justify-content:center;
   }
   .drawer-close svg{ width:15px; height:15px; }
-
+ 
   .drawer-body{
     flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 20px;
     min-height:0;
@@ -486,7 +487,7 @@
     text-align:center; color:var(--ink-soft); padding:60px 10px; font-size:0.92rem;
   }
   .empty-cart svg{ width:44px; height:44px; margin-bottom:14px; opacity:0.5; }
-
+ 
   .cart-item{
     display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line);
   }
@@ -504,7 +505,7 @@
     margin-left:auto; background:none; border:none; color:var(--brick); font-size:0.78rem; font-weight:700;
     text-decoration:underline;
   }
-
+ 
   .drawer-foot{
     border-top:1px solid var(--line);
     padding:16px 20px calc(20px + var(--safe-b));
@@ -517,7 +518,7 @@
   }
   .total-row .label{ font-size:0.9rem; color:var(--ink-soft); font-weight:600; }
   .total-row .amount{ font-family:'JetBrains Mono', monospace; font-weight:800; font-size:1.3rem; color:var(--ink); }
-
+ 
   .checkout-btn{
     width:100%;
     background:var(--marigold);
@@ -531,7 +532,7 @@
   }
   .checkout-btn:hover{ background:var(--marigold-dark); }
   .checkout-btn:disabled{ background:#E4DCC8; color:#9a9481; cursor:not-allowed; }
-
+ 
   /* ---------- CHECKOUT FORM ---------- */
   .checkout-form{
     display:none;
@@ -556,6 +557,52 @@
     min-height:46px;
   }
   .checkout-form input:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+ 
+  .cod-check{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    user-select:none;
+    padding:4px 2px;
+  }
+  .cod-check input[type="checkbox"]{
+    position:absolute;
+    opacity:0;
+    width:1px; height:1px;
+  }
+  .cod-box{
+    flex-shrink:0;
+    width:24px; height:24px;
+    border-radius:7px;
+    border:2px solid var(--line);
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    transition:background .18s ease, border-color .18s ease;
+  }
+  .cod-box svg{
+    width:14px; height:14px;
+    stroke:#fff;
+    opacity:0;
+    transform:scale(0.6);
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .cod-check input[type="checkbox"]:checked + .cod-box{
+    background:var(--teal);
+    border-color:var(--teal);
+  }
+  .cod-check input[type="checkbox"]:checked + .cod-box svg{
+    opacity:1;
+    transform:scale(1);
+  }
+  .cod-check input[type="checkbox"]:focus-visible + .cod-box{
+    outline:2px solid var(--teal); outline-offset:2px;
+  }
+  .cod-label{
+    font-size:0.92rem;
+    font-weight:600;
+    color:var(--ink);
+  }
   .back-to-cart{
     background:none; border:none; color:var(--ink-soft); font-size:0.82rem; font-weight:600;
     text-decoration:underline; align-self:flex-start; margin-top:-6px;
@@ -564,23 +611,102 @@
     color:var(--brick); font-size:0.78rem; font-weight:600; display:none;
   }
   .form-error.show{ display:block; }
-
+ 
+  /* ---------- ORDER SUCCESS SCREEN ---------- */
+  .order-success{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:34px 6px 10px;
+  }
+  .order-success .success-icon{
+    width:72px; height:72px;
+    border-radius:50%;
+    background:var(--teal);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:20px;
+    box-shadow:0 10px 26px rgba(20,125,117,0.35);
+    animation:popIn .45s cubic-bezier(.25,1.4,.4,1) both;
+  }
+  @keyframes popIn{
+    from{ transform:scale(0.4); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+  }
+  .order-success .success-icon svg{ width:32px; height:32px; stroke:#fff; }
+  .order-success h4{
+    font-family:'Fraunces', serif;
+    font-weight:800;
+    font-size:1.4rem;
+    margin:0 0 8px;
+  }
+  .order-success p.success-sub{
+    color:var(--ink-soft);
+    font-size:0.9rem;
+    margin:0 0 22px;
+    max-width:280px;
+  }
+  .order-success .success-card{
+    width:100%;
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    text-align:left;
+    margin-bottom:18px;
+  }
+  .order-success .success-card .sc-row{
+    display:flex; justify-content:space-between; gap:10px;
+    font-size:0.86rem;
+    padding:7px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .order-success .success-card .sc-row:last-child{ border-bottom:none; }
+  .order-success .success-card .sc-row .sc-label{ color:var(--ink-soft); }
+  .order-success .success-card .sc-row .sc-value{ font-weight:700; text-align:right; }
+  .order-success .success-card .sc-total{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800; color:var(--teal-dark);
+  }
+  .order-success .success-note{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+    line-height:1.5;
+  }
+  .order-success .success-note a{
+    color:var(--teal-dark); font-weight:700; text-decoration:underline;
+  }
+  .continue-btn{
+    width:100%;
+    background:var(--ink);
+    color:var(--cream);
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:0.94rem;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .continue-btn:hover{ background:var(--brick); }
+  }
+ 
   /* ================= RESPONSIVE LAYER ================= */
-
+ 
   /* Extra-small phones (older iPhones, small Androids) */
   @media (max-width:359px){
     .hero h1{ font-size:2.3rem; }
     .shop-now{ padding:14px 22px; font-size:0.9rem; width:100%; justify-content:center; }
     .drawer-head h3{ font-size:1.15rem; }
   }
-
+ 
   /* Tablets, portrait (iPad mini/Air and similar) */
   @media (min-width:600px){
     .hero-content{ padding-top:60px; }
     .products-head p{ max-width:520px; }
     .drawer{ max-width:400px; }
   }
-
+ 
   /* Tablets landscape / small laptops */
   @media (min-width:900px){
     .hero-content{ padding-top:0; max-width:620px; }
@@ -588,20 +714,20 @@
     .fab-stack{ bottom:calc(28px + var(--safe-b)); right:calc(28px + var(--safe-r)); }
     .whatsapp-fab{ bottom:calc(28px + var(--safe-b)); left:calc(28px + var(--safe-r)); }
   }
-
+ 
   /* Laptops / desktops */
   @media (min-width:1100px){
     .hero h1{ font-size:clamp(3.4rem, 5.6vw, 5.6rem); }
     .products-head p{ max-width:560px; font-size:1.05rem; }
     .drawer{ max-width:440px; }
   }
-
+ 
   /* Large / ultra-wide desktop monitors */
   @media (min-width:1600px){
     :root{ --container:1360px; }
     .hero{ max-height:820px; }
   }
-
+ 
   /* Short viewports (landscape phones, small laptops with browser chrome) */
   @media (max-height:480px) and (orientation:landscape){
     .hero{ min-height:auto; height:100vh; height:100dvh; padding-top:60px; }
@@ -611,36 +737,36 @@
     .drawer-head{ padding-top:14px; }
     .fab-stack, .whatsapp-fab{ transform:scale(0.85); }
   }
-
+ 
   /* Foldables / very narrow widths as a safety net */
   @media (max-width:280px){
     .fab-stack{ right:10px; }
     .whatsapp-fab{ left:10px; }
   }
-
+ 
   /* Fine-pointer devices only: restore intentional hover lifts removed for touch */
   @media (hover:hover) and (pointer:fine){
     .add-cart-btn:hover{ background:var(--brick); }
     .checkout-btn:hover{ background:var(--marigold-dark); }
   }
-
+ 
   /* High-DPI screens: crisper hairlines */
   @media (-webkit-min-device-pixel-ratio:2), (min-resolution:192dpi){
     .topbar, .drawer, .product-card{ border-width:0.5px; }
   }
-
+ 
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
     *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
   }
-
+ 
   @media print{
     .fab-stack, .whatsapp-fab, .overlay, .drawer, .topbar{ display:none !important; }
   }
 </style>
 </head>
 <body>
-
+ 
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-inner">
@@ -651,7 +777,7 @@
     </button>
   </div>
 </div>
-
+ 
 <!-- HERO -->
 <section class="hero">
   <img class="hero-img" src="https://i.ibb.co/j9P9bFQ3/banner-img.jpg" alt="Everdaylio shop banner">
@@ -665,7 +791,7 @@
     </button>
   </div>
 </section>
-
+ 
 <!-- PRODUCTS -->
 <section class="products-section" id="products">
   <div class="products-head">
@@ -673,7 +799,7 @@
     <h2>Pick what you're missing today</h2>
     <p>Hand-picked essentials, restocked often. Swipe through and add whatever catches your eye.</p>
   </div>
-
+ 
   <div class="carousel-wrap">
     <div class="carousel" id="carousel">
       <!-- product cards injected by JS -->
@@ -681,7 +807,7 @@
   </div>
   <p class="carousel-hint">← swipe to see more →</p>
 </section>
-
+ 
 <footer>
   <div class="footer-inner">
     <div class="brand">Everday<span>lio</span></div>
@@ -692,7 +818,7 @@
     </div>
   </div>
 </footer>
-
+ 
 <!-- FLOATING BUTTONS -->
 <div class="fab-stack">
   <button class="cart-fab" id="fabCartBtn" aria-label="Open cart">
@@ -700,11 +826,11 @@
     <span class="badge" id="fabBadge" style="display:none;">0</span>
   </button>
 </div>
-
+ 
 <a class="whatsapp-fab" href="https://wa.me/923324800680" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.004 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.6 4.38 1.64 6.22L3.2 28.8l6.77-1.6a12.73 12.73 0 0 0 6.03 1.53h.005c7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.63-3.75-9.05a12.73 12.73 0 0 0-9.05-3.75zm0 23.36h-.004a10.5 10.5 0 0 1-5.35-1.47l-.384-.228-3.98.94.95-3.88-.25-.4a10.52 10.52 0 0 1-1.62-5.6c0-5.83 4.75-10.58 10.6-10.58 2.83 0 5.49 1.1 7.49 3.1a10.52 10.52 0 0 1 3.1 7.49c-.005 5.83-4.76 10.58-10.57 10.58zm5.8-7.92c-.32-.16-1.88-.93-2.17-1.03-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.54-.71-.55h-.6c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.8.66.76.24 1.44.21 1.99.13.61-.09 1.88-.77 2.14-1.51.27-.74.27-1.38.19-1.51-.08-.14-.29-.21-.61-.37z"/></svg>
 </a>
-
+ 
 <!-- CART OVERLAY + DRAWER -->
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
@@ -714,19 +840,19 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
     </button>
   </div>
-
+ 
   <div class="drawer-body" id="cartBody">
     <!-- cart contents injected by JS -->
   </div>
-
+ 
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
     <div class="total-row">
       <span class="label">Total</span>
       <span class="amount" id="totalAmount">Rs. 0</span>
     </div>
-
+ 
     <button class="checkout-btn" id="checkoutBtn">Checkout</button>
-
+ 
     <form class="checkout-form" id="checkoutForm">
       <button type="button" class="back-to-cart" id="backToCart">← back to cart</button>
       <div>
@@ -734,18 +860,29 @@
         <input type="text" id="custName" name="custName" placeholder="e.g. Ayesha Khan" required>
       </div>
       <div>
+        <label for="custAddress">Delivery address</label>
+        <input type="text" id="custAddress" name="custAddress" placeholder="House #, street, area, city" required>
+      </div>
+      <div>
         <label for="custPhone">Phone number</label>
         <input type="tel" id="custPhone" name="custPhone" placeholder="e.g. 0332 4800 680" required>
       </div>
-      <span class="form-error" id="formError">Please fill in your name and phone number.</span>
-      <button type="submit" class="checkout-btn">Place Order via Email</button>
+      <label class="cod-check" for="codCheck">
+        <input type="checkbox" id="codCheck" name="codCheck">
+        <span class="cod-box" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </span>
+        <span class="cod-label">Cash on Delivery</span>
+      </label>
+      <span class="form-error" id="formError">Please fill in your name, address, and phone number.</span>
+      <button type="submit" class="checkout-btn">Place Order</button>
     </form>
   </div>
 </div>
-
+ 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-
+ 
   // ---------- PRODUCT DATA ----------
   const PRODUCTS = [
     {
@@ -770,12 +907,27 @@
       img: 'https://i.ibb.co/V8b4jVG/2026-06-13-7cd9ae377b86787235093ae4914f4d19.png'
     }
   ];
-
+ 
   const SHOP_EMAIL = 'everlio332@gmail.com';
-
+ 
+  // ---------- EMAILJS SETUP ----------
+  // 1. Create a free account at https://www.emailjs.com
+  // 2. Add your Gmail as an "Email Service" -> copy its Service ID below
+  // 3. Create an Email Template with variables: {{from_name}} {{from_address}}
+  //    {{from_phone}} {{payment_method}} {{order_items}} {{order_total}} {{to_email}}
+  //    -> copy its Template ID below
+  // 4. Account -> General -> copy your Public Key below
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+  const EMAILJS_SERVICE_ID  = 'YOUR_EMAILJS_SERVICE_ID';
+  const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID';
+ 
+  if (window.emailjs && EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+ 
   // ---------- STATE ----------
   let cart = {}; // id -> qty
-
+ 
   // ---------- RENDER PRODUCTS ----------
   const carousel = document.getElementById('carousel');
   carousel.innerHTML = PRODUCTS.map(p => `
@@ -794,7 +946,7 @@
       </div>
     </div>
   `).join('');
-
+ 
   document.querySelectorAll('.add-cart-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.dataset.id;
@@ -808,12 +960,12 @@
       }, 900);
     });
   });
-
+ 
   // ---------- SHOP NOW SCROLL ----------
   document.getElementById('shopNowBtn').addEventListener('click', () => {
     document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
   });
-
+ 
   // ---------- BADGES ----------
   function cartCount(){
     return Object.values(cart).reduce((a,b) => a+b, 0);
@@ -830,7 +982,7 @@
       }
     });
   }
-
+ 
   // ---------- CART DRAWER ----------
   const overlay = document.getElementById('overlay');
   const drawer = document.getElementById('drawer');
@@ -838,7 +990,7 @@
   const drawerFoot = document.getElementById('drawerFoot');
   const checkoutForm = document.getElementById('checkoutForm');
   const checkoutBtn = document.getElementById('checkoutBtn');
-
+ 
   function openDrawer(){
     overlay.classList.add('show');
     drawer.classList.add('show');
@@ -851,18 +1003,18 @@
     checkoutForm.classList.remove('show');
     checkoutBtn.style.display = 'block';
   }
-
+ 
   ['topCartBtn','fabCartBtn'].forEach(id => {
     document.getElementById(id).addEventListener('click', () => { renderCart(); openDrawer(); });
   });
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
-
+ 
   function productById(id){ return PRODUCTS.find(p => p.id === id); }
-
+ 
   function renderCart(){
     const ids = Object.keys(cart).filter(id => cart[id] > 0);
-
+ 
     if(ids.length === 0){
       cartBody.innerHTML = `
         <div class="empty-cart">
@@ -873,9 +1025,9 @@
       updateBadges(false);
       return;
     }
-
+ 
     drawerFoot.style.display = 'block';
-
+ 
     cartBody.innerHTML = ids.map(id => {
       const p = productById(id);
       const qty = cart[id];
@@ -894,10 +1046,10 @@
           </div>
         </div>`;
     }).join('');
-
+ 
     const total = ids.reduce((sum,id) => sum + productById(id).price * cart[id], 0);
     document.getElementById('totalAmount').textContent = `Rs. ${total.toLocaleString()}`;
-
+ 
     cartBody.querySelectorAll('[data-action]').forEach(el => {
       el.addEventListener('click', () => {
         const id = el.dataset.id;
@@ -909,10 +1061,10 @@
         renderCart();
       });
     });
-
+ 
     updateBadges(false);
   }
-
+ 
   // ---------- CHECKOUT FORM ----------
   checkoutBtn.addEventListener('click', () => {
     checkoutForm.classList.add('show');
@@ -922,46 +1074,131 @@
     checkoutForm.classList.remove('show');
     checkoutBtn.style.display = 'block';
   });
-
+ 
+  function buildOrderText(name, address, phone, lines, total, cod){
+    return `New order from the Everdaylio website
+ 
+Customer name: ${name}
+Delivery address: ${address}
+Phone number: ${phone}
+Payment method: ${cod ? 'Cash on Delivery (COD)' : 'Not specified'}
+ 
+Items:
+${lines.map(l => `- ${l.name} x${l.qty} — Rs. ${l.subtotal.toLocaleString()}`).join('\n')}
+ 
+Total: Rs. ${total.toLocaleString()}
+`;
+  }
+ 
+  function showOrderSuccess({ name, address, phone, lines, total, cod }){
+    document.querySelector('.drawer-head h3').textContent = 'Order placed!';
+    drawerFoot.style.display = 'none';
+ 
+    cartBody.innerHTML = `
+      <div class="order-success">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </div>
+        <h4>Thanks, ${name}!</h4>
+        <p class="success-sub">Your order has been received. We'll reach out on ${phone} to confirm delivery to ${address}.</p>
+ 
+        <div class="success-card">
+          ${lines.map(l => `
+            <div class="sc-row">
+              <span class="sc-label">${l.name} × ${l.qty}</span>
+              <span class="sc-value">Rs. ${l.subtotal.toLocaleString()}</span>
+            </div>`).join('')}
+          <div class="sc-row">
+            <span class="sc-label">Payment</span>
+            <span class="sc-value">${cod ? 'Cash on Delivery' : 'Not specified'}</span>
+          </div>
+          <div class="sc-row">
+            <span class="sc-label">Total</span>
+            <span class="sc-value sc-total">Rs. ${total.toLocaleString()}</span>
+          </div>
+        </div>
+ 
+        <button class="continue-btn" id="continueShoppingBtn">Continue Shopping</button>
+      </div>
+    `;
+ 
+    document.getElementById('continueShoppingBtn').addEventListener('click', () => {
+      cart = {};
+      document.getElementById('custName').value = '';
+      document.getElementById('custAddress').value = '';
+      document.getElementById('custPhone').value = '';
+      document.getElementById('codCheck').checked = false;
+      document.getElementById('formError').classList.remove('show');
+      checkoutForm.classList.remove('show');
+      checkoutBtn.style.display = 'block';
+      document.querySelector('.drawer-head h3').textContent = 'Your cart';
+      updateBadges(false);
+      renderCart();
+      closeDrawer();
+    });
+  }
+ 
   checkoutForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const name = document.getElementById('custName').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
     const phone = document.getElementById('custPhone').value.trim();
+    const cod = document.getElementById('codCheck').checked;
     const errorEl = document.getElementById('formError');
-
+    const submitBtn = checkoutForm.querySelector('button[type="submit"]');
+ 
     const ids = Object.keys(cart).filter(id => cart[id] > 0);
-    if(!name || !phone || ids.length === 0){
+    if(!name || !address || !phone || ids.length === 0){
+      errorEl.textContent = 'Please fill in your name, address, and phone number.';
       errorEl.classList.add('show');
       return;
     }
     errorEl.classList.remove('show');
-
+ 
     const lines = ids.map(id => {
       const p = productById(id);
       const qty = cart[id];
-      return `- ${p.name} x${qty} — Rs. ${(p.price*qty).toLocaleString()}`;
+      return { name: p.name, qty, subtotal: p.price * qty };
     });
-    const total = ids.reduce((sum,id) => sum + productById(id).price * cart[id], 0);
-
-    const subject = `New Order from ${name} — Everdaylio`;
-    const body =
-`New order from Everdaylio website
-
-Customer name: ${name}
-Phone number: ${phone}
-
-Items:
-${lines.join('\n')}
-
-Total: Rs. ${total.toLocaleString()}
-`;
-
-    const mailto = `mailto:${SHOP_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
+    const total = lines.reduce((sum, l) => sum + l.subtotal, 0);
+    const orderText = buildOrderText(name, address, phone, lines, total, cod);
+ 
+    const configured = window.emailjs && EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY';
+ 
+    if (!configured) {
+      // EmailJS keys not filled in yet — still show the thank-you page,
+      // but let the shop owner know no email was actually sent.
+      console.warn('EmailJS is not configured yet. Add your keys near the top of the script to enable real order emails.');
+      showOrderSuccess({ name, address, phone, lines, total, cod });
+      return;
+    }
+ 
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Placing order…';
+ 
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: SHOP_EMAIL,
+      from_name: name,
+      from_address: address,
+      from_phone: phone,
+      payment_method: cod ? 'Cash on Delivery (COD)' : 'Not specified',
+      order_items: orderText,
+      order_total: `Rs. ${total.toLocaleString()}`
+    }).then(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Place Order';
+      showOrderSuccess({ name, address, phone, lines, total, cod });
+    }).catch((err) => {
+      console.error('EmailJS send failed:', err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Place Order';
+      errorEl.textContent = "Something went wrong sending your order. Please try again, or message us on WhatsApp.";
+      errorEl.classList.add('show');
+    });
   });
-
+ 
   updateBadges(false);
 </script>
-
+ 
 </body>
 </html>
